@@ -7,6 +7,10 @@ const port = 3000;
 const usersServiceUrl = 'http://localhost:3001';
 const productsServiceUrl = 'http://localhost:3002';
 
+const cors = require("cors");
+app.use(cors());
+
+
 app.use(express.json());
 
 // Proxy para usuarios

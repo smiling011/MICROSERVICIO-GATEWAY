@@ -1,6 +1,8 @@
 const express = require('express');
 const axios = require('axios');
 require('dotenv').config();
+console.log('DB_USER:', process.env.DB_USER);
+console.log('DB_PASS:', process.env.DB_PASS ? '(password found)' : '(no password)');
 
 const sequelize = require('./config/database');
 const userRoutes = require('./routes/userRoutes'); 
