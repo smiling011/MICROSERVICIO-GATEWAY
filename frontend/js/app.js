@@ -35,14 +35,47 @@ async function cargarUsuarios() {
   }
 }
 
+// Guardar usuario (crear)
 // Guardar usuario (crear o actualizar)
 document.getElementById("userForm")?.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const id = document.getElementById("id").value;
-  const nombre = document.getElementById("nombre").value;
-  const email = document.getElementById("email").value;
-  const telefono = document.getElementById("telefono").value;
+  let id = document.getElementById("id").value.trim();
+  let nombre = document.getElementById("nombre").value.trim();
+  let email = document.getElementById("email").value.trim();
+  let telefono = document.getElementById("telefono").value.trim();
+
+  // 🔹 Validación: Nombre
+  if (!nombre) {
+    return Swal.fire({
+      icon: "warning",
+      title: "Nombre inválido",
+      text: "El nombre no puede estar vacío ni tener solo espacios."
+    });
+  }
+
+  // 🔹 Validación: Teléfono (solo números y longitud 10–15)
+  const telefonoRegex = /^[0-9]{10,15}$/;
+  if (!telefonoRegex.test(telefono)) {
+    return Swal.fire({
+      icon: "warning",
+      title: "Teléfono inválido",
+      text: "El teléfono debe contener solo números y tener entre 10 y 15 dígitos."
+    });
+  }
+
+  // 🔹 Validación: Correo con dominio mínimo de 2 letras
+  // Acepta extensiones de 2 a 4 letras (como .co, .com, .info)
+    // 🔹 Validación: Aceptar únicamente correos que terminen en .com
+const emailRegex = /^[\w._%+-]+@[A-Za-z0-9.-]+\.com$/i;
+if (!emailRegex.test(email)) {
+  return Swal.fire({
+    icon: "warning",
+    title: "Correo inválido",
+    text: "El correo debe terminar en .com (ej: usuario@empresa.com)."
+  });
+}
+
 
   const user = { nombre, email, telefono };
   const method = id ? "PUT" : "POST";
@@ -62,6 +95,7 @@ document.getElementById("userForm")?.addEventListener("submit", async (e) => {
       title: "Éxito",
       text: "Usuario guardado correctamente"
     }).then(() => window.location.href = "index.html");
+
   } catch (error) {
     console.error(error);
     Swal.fire({
@@ -71,6 +105,7 @@ document.getElementById("userForm")?.addEventListener("submit", async (e) => {
     });
   }
 });
+
 
 // Eliminar usuario
 async function eliminarUsuario(id) {
